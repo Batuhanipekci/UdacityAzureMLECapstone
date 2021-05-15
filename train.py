@@ -50,7 +50,11 @@ def preprocess_text(text):
 
 
 def main():
-    dataset = pd.read_csv('Data/train.csv')
+    data1 = pd.read_csv('Data/data_part1.csv')
+    data2 = pd.read_csv('Data/data_part2.csv')
+    data3 = pd.read_csv('Data/data_part3.csv')
+    dataset = data1.append(data2).append(data3)
+    
     dataset = clean_df(dataset)
     dataset['text'] = dataset['text'].apply(clean_text)
 
