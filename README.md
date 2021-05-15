@@ -79,8 +79,8 @@ The plots of the best HyperDrive solution. Observe that AUC gets always better w
 ![HDPlots](Screenshots/ss004_hdplots.png)
 
 ## Model Deployment
-*TODO*: Give an overview of the deployed model and instructions on how to query the endpoint with a sample input.
-Please check automl.py for the details of the model deployment.
+
+Please check automl.ipynb for the details of the model deployment.
 
 The AutoML model is deployed although it was beaten by HyperDrive on the out-of-the-bag test dataset. The reason was the idea of ensembling different algorithms. I personally prefer to combine multiple good performing models instead of relying on a single model. This strategy could yield decreasing the variance of the errors in the long term, during the production. Production is not a one-shot game, therefore we should not rely on just a single test dataset to make the final decision. Also, there wasn't a very big difference between the performances of the HyperDrive and AutoML solutions.
 
@@ -96,9 +96,9 @@ Detailed view of the endpoint. Observe that Application Insights are enabled and
 
 
 ## Screen Recording
-*TODO* Provide a link to a screen recording of the project in action. Remember that the screencast should demonstrate:
 The following link on Youtube can be visited for a live demonstration of the endpoint:
 https://www.youtube.com/watch?v=GEDGMv98OJE
+
 The video contains:
 - A working model
 - Demo of the deployed  model
@@ -106,4 +106,18 @@ The video contains:
 
 ## Standout Suggestions
 * Enabling logging for the endpoint.
+
+## Further Work
+
+This project can be extended in multiple ways:
+
+* More features can be extracted from the omitted tags column of the original dataset.
+* A more suitable sequential algorithm like Bidirectional LSTM, or a transformer-based model like BERT can be implemented. Even further, the word embeddings can be enhanced through transfer learning from large pre-trained models.
+* On the DevOps side, pipelines can be improved by defining the data reading and preparation step as separate from the model fitting step. That would make AutoML a lot efficient.
+* The best models can be stored in ONNX format to be able to use it on multiple platforms.
+* Key-based authentication can be enabled for a more secure application.
+* Endpoint can be tested in terms of speed. 
+* Endpoints can be further improved by accepting only the text, rather than the whole matrix of word embeddings. The tokenization and count-vectorization should be handled on the backend as a separate step in the pipeline.
+
+
 
