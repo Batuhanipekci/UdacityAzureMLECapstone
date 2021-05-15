@@ -22,14 +22,23 @@ On the other hand, the Azure Datastore is utilized for implementing the AutoML s
 
 
 ## Automated ML
-*TODO*: Give an overview of the `automl` settings and configuration you used for this experiment
 The AutoML configurations are quite simple. The timeout is set to 30 minutes and the task is a (binary) classification. A separate validation dataset is provided for model selection within the AutoML module. The primary metric to optimize is AUC_weighted, as optimizing Area under the ROC curve also minimizes the true negatives and false positives in binary classification. Optimizing accuracy does not provide this feature by definition. The data has passed AzureML input guardrails, being a class-balanced dataset without missing values and high cardinality features.
 
 ### Results
-*TODO*: What are the results you got with your automated ML model? What were the parameters of the model? How could you have improved it?
 The best results from AutoML process are obtained by a Voting Ensemble of 3 LightGBM with different settings, LogisticRegression, XGBoostClassifier, ExtremeRandomTrees, and RandomForest. The voting power of those models are weighted by their individual performances on the validation dataset. A lightGBM setup with 30%, LogisticRegression with 27%, and RandomForest with 15% of total weights dominate the decision making. AutoML is very useful to make the use of the best of the best models very easily. The validation accuracy of this ensemble is 0.79 and validation AUC score is 0.87.
 
-*TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
+The RunDetail widget has run but did not produce plots. Therefore, the screenshots of the Azure ML UI have also been included here.
+The RunDetail widget:
+![AutoMLRunDetails](Screenshots/ss009_automlrundetails.png)
+
+The AutoML model ranking:
+![AutoMLModelRanking](Screenshots/ss005_automodels.png)
+
+The best AutoML model as the Voting Ensemble:
+![AutoMLPlots](Screenshots/ss010_automlwinneralgo.png)
+
+The plots of the best AutoML solution. Observe that ROC curve is distant from the 45 degree line, distinguished from a random prediction:
+![AutoMLPlots](Screenshots/ss006_autoplots.png)
 
 ## Hyperparameter Tuning
 *TODO*: What kind of model did you choose for this experiment and why? Give an overview of the types of parameters and their ranges used for the hyperparameter search
