@@ -88,6 +88,13 @@ The deployment has done through (1) registering the best AutoML model, (2) Downl
 
 Querying the endpoint: After the endpoint has been published, the status turned on to be "Healthy". The endpoint uri can either be obtained by printing the webservice object to the notebook cell, or from the Azure ML UI for endpoints. After the uri has been obtained, a sample data has been created by looping over the features. Then, a json payload object was serialized for the sample data and sent to the uri as a HTTP post request. The request has been successful, without any exceptions that are stated in the notebook. The resulting message was 1, meaning that the question is of high quality. 
 
+Screenshot for the resulting endpoint:
+![EndpointSummary](Screenshots/ss007_autoendpoint.png)
+
+Detailed view of the endpoint. Observe that Application Insights are enabled and status is healthy:
+![EndpointDetails](Screenshots/ss008_autoendpointdetail.png)
+
+
 ## Screen Recording
 *TODO* Provide a link to a screen recording of the project in action. Remember that the screencast should demonstrate:
 The following link on Youtube can be visited for a live demonstration of the endpoint:
