@@ -28,20 +28,25 @@ The AutoML configurations are quite simple. The timeout is set to 30 minutes and
 The best results from AutoML process are obtained by a Voting Ensemble of 3 LightGBM with different settings, LogisticRegression, XGBoostClassifier, ExtremeRandomTrees, and RandomForest. The voting power of those models are weighted by their individual performances on the validation dataset. A lightGBM setup with 30%, LogisticRegression with 27%, and RandomForest with 15% of total weights dominate the decision making. AutoML is very useful to make the use of the best of the best models very easily. The validation accuracy of this ensemble is 0.79 and validation AUC score is 0.87.
 
 The RunDetail widget has run but did not produce plots. Therefore, the screenshots of the Azure ML UI have also been included here.
+
 The RunDetail widget:
+
 ![AutoMLRunDetails](Screenshots/ss009_automlrundetails.png)
 
 The AutoML model ranking:
+
 ![AutoMLModelRanking](Screenshots/ss005_automodels.png)
 
 The best AutoML model as the Voting Ensemble:
-![AutoMLPlots](Screenshots/ss010_automlwinneralgo.png)
+
+![AutoMLWinner](Screenshots/ss010_automlwinneralgo.png)
 
 The plots of the best AutoML solution. Observe that ROC curve is distant from the 45 degree line, distinguished from a random prediction:
+
 ![AutoMLPlots](Screenshots/ss006_autoplots.png)
 
 ## Hyperparameter Tuning
-*TODO*: What kind of model did you choose for this experiment and why? Give an overview of the types of parameters and their ranges used for the hyperparameter search
+
 GradientBoostingClassifier from Scikit-learn has been used for the HyperDrive experiment. The reason was that it was quite easy to use, without requiring additional data wrappers and compatible model save capabilities (The most updated version of LightGBM does not allow to save models through pickle/joblib, so GradientBoostingClassifier resques us from the model-save-burden). It proved to be also a slightly better option than the voting ensemble from the AutoML (surprisingly), when tested on a separate out-of-bag test set. 
 
 GradientBoostingClassifier is set with a validation fraction of 0.2, which was used for its own default early stopping rule. Two hyperparameters (learning_rate and n_estimators) are tuned to get the best result. The learning_rate is important to set up, as small learning rates might lead us stuck at infeasible regions during the optimization and large learning rates might jump over potentially good local optima. On the other hand, the number of base estimators (default base estimator type is a decision tree), n_estimators, would increase accuracy as it increases. However, there is a risk of overfitting with too many base estimators. Both hyperparamters are quite fundamental to be tuned. Please refer to train.py in order to explore the complete model fitting process.
@@ -49,16 +54,29 @@ GradientBoostingClassifier is set with a validation fraction of 0.2, which was u
 Th Hyperparameter tuning is done through randomly picking the learning_rate from a uniform distribution between 0.01 and 0.15, while selecting n_estimators from a discrete set of (100, 300, 500). BanditPolicy has been used for early stopping, however it wasn't activated during the process, although the primary_metric_name is well-defined in logs. However, the default early-stopping policy of the classifier has been active.
 
 
+
 ### Results
-*TODO*: What are the results you got with your model? What were the parameters of the model? How could you have improved it?
 
 The best performing model on the separate test set has learning_rate at 0.135 and n_estimators as 500. This setup has achieved 0.7667 AUC and 0.7665 Accuracy.
 Later the AutoML choice has been compared the HyperDrive on the exact same test set (Observe that train_test_split() has been called in both notebooks with test_size=0.33 and random_state=42). HyperDrive solution has beaten the AutoML very slightly.
 
 These results of HyperDrive can be improved further. In this project, only the most basic hyperparameters on a very restricted parameter space were tried. There are a lot to try out in gradient boosters like max_depth of base regressors, max_leaf_nodes, min_samples_leaf etc. A wider parameter space with more hyperparameters, and a perhaps a more efficient sampling (like Bayesian) would result in better accuracy and AUC scores.
 
+The RunDetail widget:
 
-*TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
+![HDRunDetails](Screenshots/ss003hd_rundetails.png)
+
+The HyperDrive model ranking:
+
+![HDModelRanking](Screenshots/ss001_besthdrun.png)
+
+The best HyperDrive model with learning_rate:0.135 and n_estimators:500
+
+![HDWinner](Screenshots/ss002_besthdrundetail.png)
+
+The plots of the best HyperDrive solution. Observe that AUC gets always better with high n_estimators, regardless of different learning_rates.
+
+![HDPlots](Screenshots/ss004_hdplots.png)
 
 ## Model Deployment
 *TODO*: Give an overview of the deployed model and instructions on how to query the endpoint with a sample input.
