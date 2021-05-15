@@ -1,9 +1,10 @@
-*NOTE:* This file is a template that you can use to create the README for your project. The *TODO* comments below will highlight the information you should be sure to include.
-
 # Capstone - Azure Machine Learning Engineer
 ### Stackoverflow Question Quality Prediction, Batuhan Ipekci, 15.05.2021
 
-This project outlines an attempt to predict Stackoverflow question quality, using Azure ML platform. Various features of the platform have been explored throughout the project, most notably AutoML, HyperDrive, and automated deployment. The HyperDrive solution has slightly better Accuracy and AUC (Area under ROC curve) scores than AutoML solution on out-of-bag test set. Although the AutoML solution looks like superior on the validation sets, we can discuss that it is slightly underperforming on an unseen test dataset. The AutoML model is deployed for demonstration purposes, and a sample data payload is sent as a Post request to the resulting endpoint. 
+This project outlines an attempt to predict Stackoverflow question quality, using Azure ML platform. Various features of the platform have been explored throughout the project, most notably AutoML, HyperDrive, and automated deployment. The HyperDrive solution has slightly better Accuracy and AUC (Area under ROC curve) scores than AutoML solution on out-of-bag test set. Although the AutoML solution looks like superior on the validation sets, we can discuss that it is slightly underperforming on an unseen test dataset. The AutoML model is deployed for demonstration purposes, and a sample data payload is sent as a Post request to the resulting endpoint.
+
+Results on the oob test set for AutoML solution and HyperDrive solution
+![Result](Screenshots/ss000_results.png)
 
 ## Dataset
 
