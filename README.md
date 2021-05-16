@@ -4,7 +4,7 @@
 This project outlines an attempt to predict Stackoverflow question quality, using Azure ML platform. Various features of the platform have been explored throughout the project, most notably AutoML, HyperDrive, and automated deployment. The HyperDrive solution has slightly better Accuracy and AUC (Area under ROC curve) scores than AutoML solution on out-of-bag test set. Although the AutoML solution looks like superior on the validation sets, we can discuss that it is slightly underperforming on an unseen test dataset. The AutoML model is deployed for demonstration purposes, and a sample data payload is sent as a Post request to the resulting endpoint.
 
 Results on the oob test set for AutoML solution and HyperDrive solution
-![Result](Screenshots/ss000_results.png)
+![Result](Screenshots/result.png)
 
 ## Dataset
 
@@ -31,19 +31,19 @@ The RunDetail widget has run but did not produce plots. Therefore, the screensho
 
 The RunDetail widget:
 
-![AutoMLRunDetails](Screenshots/ss009_automlrundetails.png)
+![AutoMLRunDetails](Screenshots/automl_rundetails.png)
 
 The AutoML model ranking:
 
-![AutoMLModelRanking](Screenshots/ss005_automodels.png)
+![AutoMLModelRanking](Screenshots/automl_allmodels.png)
 
 The best AutoML model as the Voting Ensemble:
 
-![AutoMLWinner](Screenshots/ss010_automlwinneralgo.png)
+![AutoMLWinner](Screenshots/automl_bestmodel.png)
 
 The plots of the best AutoML solution. Observe that ROC curve is distant from the 45 degree line, distinguished from a random prediction:
 
-![AutoMLPlots](Screenshots/ss006_autoplots.png)
+![AutoMLPlots](Screenshots/automl_plots.png)
 
 ## Hyperparameter Tuning
 
@@ -64,19 +64,19 @@ These results of HyperDrive can be improved further. In this project, only the m
 
 The RunDetail widget:
 
-![HDRunDetails](Screenshots/ss003hd_rundetails.png)
+![HDRunDetails](Screenshots/hdr_rundetails.png)
 
 The HyperDrive model ranking:
 
-![HDModelRanking](Screenshots/ss001_besthdrun.png)
+![HDModelRanking](Screenshots/hdr_allmodels.png)
 
 The best HyperDrive model with learning_rate:0.135 and n_estimators:500
 
-![HDWinner](Screenshots/ss002_besthdrundetail.png)
+![HDWinner](Screenshots/hdr_best.png)
 
 The plots of the best HyperDrive solution. Observe that AUC gets always better with high n_estimators, regardless of different learning_rates.
 
-![HDPlots](Screenshots/ss004_hdplots.png)
+![HDPlots](Screenshots/hdr_plots.png)
 
 ## Model Deployment
 
@@ -89,10 +89,10 @@ The deployment has done through (1) registering the best AutoML model, (2) Downl
 Querying the endpoint: After the endpoint has been published, the status turned on to be "Healthy". The endpoint uri can either be obtained by printing the webservice object to the notebook cell, or from the Azure ML UI for endpoints. After the uri has been obtained, a sample data has been created by looping over the features. Then, a json payload object was serialized for the sample data and sent to the uri as a HTTP post request. The request has been successful, without any exceptions that are stated in the notebook. The resulting message was 1, meaning that the question is of high quality. 
 
 Screenshot for the resulting endpoint:
-![EndpointSummary](Screenshots/ss007_autoendpoint.png)
+![EndpointSummary](Screenshots/endpoint_overview.png)
 
 Detailed view of the endpoint. Observe that Application Insights are enabled and status is healthy:
-![EndpointDetails](Screenshots/ss008_autoendpointdetail.png)
+![EndpointDetails](Screenshots/endpoint_status.png)
 
 
 ## Screen Recording
