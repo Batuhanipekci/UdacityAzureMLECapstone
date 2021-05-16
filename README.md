@@ -22,10 +22,10 @@ On the other hand, the Azure Datastore is utilized for implementing the AutoML s
 
 
 ## Automated ML
-The AutoML configurations are quite simple. The timeout is set to 30 minutes and the task is a (binary) classification. A separate validation dataset is provided for model selection within the AutoML module. The primary metric to optimize is AUC_weighted, as optimizing Area under the ROC curve also minimizes the true negatives and false positives in binary classification. Optimizing accuracy does not provide this feature by definition. The data has passed AzureML input guardrails, being a class-balanced dataset without missing values and high cardinality features.
+The AutoML configurations are quite simple. The timeout is set to 50 minutes and the task is a (binary) classification. A separate validation dataset is provided for model selection within the AutoML module. The primary metric to optimize is AUC_weighted, as optimizing Area under the ROC curve also minimizes the true negatives and false positives in binary classification. Optimizing accuracy does not provide this feature by definition. The data has passed AzureML input guardrails, being a class-balanced dataset without missing values and high cardinality features.
 
 ### Results
-The best results from AutoML process are obtained by a Voting Ensemble of 3 LightGBM with different settings, LogisticRegression, XGBoostClassifier, ExtremeRandomTrees, and RandomForest. The voting power of those models are weighted by their individual performances on the validation dataset. A lightGBM setup with 30%, LogisticRegression with 27%, and RandomForest with 15% of total weights dominate the decision making. AutoML is very useful to make the use of the best of the best models very easily. The validation accuracy of this ensemble is 0.79 and validation AUC score is 0.87.
+The best results from AutoML process are obtained by a Voting Ensemble of 2 LightGBM with different settings, 3 LogisticRegression with different settings, XGBoostClassifier, and ExtremeRandomTrees. The voting power of those models are weighted by their individual performances on the validation dataset. LightGBM setups in total with 45% and LogisticRegression setups in total with 23%, and ExtremeRandomTrees with 23% of the weights dominate the decision making. AutoML is very useful to make the use of the best of the best models very easily. The validation accuracy of this ensemble is 0.79 and validation AUC score is 0.87.
 
 The RunDetail widget has run but did not produce plots. Therefore, the screenshots of the Azure ML UI have also been included here.
 
@@ -57,7 +57,7 @@ Th Hyperparameter tuning is done through randomly picking the learning_rate from
 
 ### Results
 
-The best performing model on the separate test set has learning_rate at 0.135 and n_estimators as 500. This setup has achieved 0.7667 AUC and 0.7665 Accuracy.
+The best performing model on the separate test set has learning_rate at 0.141 and n_estimators as 500. This setup has achieved 0.7667 AUC and 0.7665 Accuracy.
 Later the AutoML choice has been compared the HyperDrive on the exact same test set (Observe that train_test_split() has been called in both notebooks with test_size=0.33 and random_state=42). HyperDrive solution has beaten the AutoML very slightly.
 
 These results of HyperDrive can be improved further. In this project, only the most basic hyperparameters on a very restricted parameter space were tried. There are a lot to try out in gradient boosters like max_depth of base regressors, max_leaf_nodes, min_samples_leaf etc. A wider parameter space with more hyperparameters, and a perhaps a more efficient sampling (like Bayesian) would result in better accuracy and AUC scores.
@@ -70,7 +70,7 @@ The HyperDrive model ranking:
 
 ![HDModelRanking](Screenshots/hdr_allmodels.png)
 
-The best HyperDrive model with learning_rate:0.135 and n_estimators:500
+The best HyperDrive model with learning_rate:0.141 and n_estimators:500
 
 ![HDWinner](Screenshots/hdr_best.png)
 
@@ -84,7 +84,7 @@ Please check automl.ipynb for the details of the model deployment.
 
 The AutoML model is deployed although it was beaten by HyperDrive on the out-of-the-bag test dataset. The reason was the idea of ensembling different algorithms. I personally prefer to combine multiple good performing models instead of relying on a single model. This strategy could yield decreasing the variance of the errors in the long term, during the production. Production is not a one-shot game, therefore we should not rely on just a single test dataset to make the final decision. Also, there wasn't a very big difference between the performances of the HyperDrive and AutoML solutions.
 
-The deployment has done through (1) registering the best AutoML model, (2) Downloading the scoring script that is automatically provided by the Azure ML Run class. (3) The inference config has been built using the downloaded scoring script (score.py). This is quite important in defining what the endpoint excepts as a data and how it operates. (4) AciWebservice has been initialized with a compute cluster of 2 CPU cores and 2 GB memory. (5) AciWebService, inference config, and the model has been deployed using the Model class of Azure ML.
+The deployment has done through (1) registering the best AutoML model, (2) Downloading the scoring script that is automatically provided by the Azure ML Run class. (3) The inference config has been built using the downloaded scoring script (score.py). This is quite important in defining what the endpoint excepts as a data and how it operates. Also the python environment (deploy_env) is also given. (4) AciWebservice has been initialized with a compute cluster of 2 CPU cores and 2 GB memory. (5) AciWebService, inference config, and the model has been deployed using the Model class of Azure ML.
 
 Querying the endpoint: After the endpoint has been published, the status turned on to be "Healthy". The endpoint uri can either be obtained by printing the webservice object to the notebook cell, or from the Azure ML UI for endpoints. After the uri has been obtained, a sample data has been created by looping over the features. Then, a json payload object was serialized for the sample data and sent to the uri as a HTTP post request. The request has been successful, without any exceptions that are stated in the notebook. The resulting message was 1, meaning that the question is of high quality. 
 
